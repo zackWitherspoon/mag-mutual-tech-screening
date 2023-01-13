@@ -11,7 +11,7 @@ func HandleRequests() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 
 	// Endpoint to return a specific user (and all associated information)
-	myRouter.HandleFunc("/user", GetUsersByColumn)
+	//myRouter.HandleFunc("/user", GetUsersByColumn)
 
 	// Endpoint to return a list of user created between a date range
 	myRouter.HandleFunc("/users/date/{date}", homePage)
