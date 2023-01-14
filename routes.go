@@ -9,8 +9,8 @@ import (
 
 const (
 	getAllUsersEndpoint               = "/users"
-	getUserInDateRangeEndpoint        = "/getAllUsersEndpoint/date/{date}"
-	getUsersBasedOnProfessionEndpoint = "/getAllUsersEndpoint/profession/{profession}"
+	getUserInDateRangeEndpoint        = "/users/byDate"
+	getUsersBasedOnProfessionEndpoint = "/users/byProfession"
 )
 
 type Routes struct {
@@ -26,13 +26,13 @@ func (routes *Routes) LoadRoutes() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 
 	// Endpoint to return a specific user (and all associated information)
-	myRouter.HandleFunc(getAllUsersEndpoint, routes.Configuration.Service.GetUsersByCriteriaPage)
+	myRouter.HandleFunc(getAllUsersEndpoint, routes.Configuration.Service.GetAllUsers)
 	myRouter.HandleFunc("/", homePage)
 	//// Endpoint to return a list of user created between a date range
-	myRouter.HandleFunc(getUserInDateRangeEndpoint, homePage)
+	myRouter.HandleFunc(getUserInDateRangeEndpoint, routes.Configuration.Service.GetUsersByDatePage)
 	//
 	// Endpoint to return a list of user based on a specific profession
-	myRouter.HandleFunc(getUsersBasedOnProfessionEndpoint, homePage)
+	myRouter.HandleFunc(getUsersBasedOnProfessionEndpoint, routes.Configuration.Service.GetUsersByProfessionPage).Methods("POST")
 	//
 	//// Custom Endpoint that you design on your own
 	//myRouter.HandleFunc("/user/add", homePage).Methods("POST")

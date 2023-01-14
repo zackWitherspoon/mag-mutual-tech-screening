@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "eab6297c-6319-4cca-affd-1b9c9bf1c9c6",
+		"name": "mag-mutual-tech-screening",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4801889"
+	},
+	"item": [
+		{
+			"name": "Get All Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:10000/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Users By Date",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:10000/users/byDate?fromDate=2022-02-16&toDate=2022-02-25",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10000",
+					"path": [
+						"users",
+						"byDate"
+					],
+					"query": [
+						{
+							"key": "fromDate",
+							"value": "2022-02-16"
+						},
+						{
+							"key": "toDate",
+							"value": "2022-02-25"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Users By Profession",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"profession\": \"police officer\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:10000/users/byProfession",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10000",
+					"path": [
+						"users",
+						"byProfession"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

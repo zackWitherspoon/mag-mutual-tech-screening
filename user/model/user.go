@@ -1,6 +1,7 @@
 package model
 
 import (
+	"encoding/json"
 	"time"
 )
 
@@ -15,10 +16,11 @@ type User struct {
 	City        string    `json:"email"`
 }
 
-//func Print(users *[]User) {
-//	for user := range users {
-//
-//	}
-//	fmt.Println(user.Id, user.FirstName, user.LastName, user.Email, user.Profession, user.DateCreated.String(),
-//		user.Country, user.City)
-//}
+func MarshalArray(users []User) []byte {
+	var marshaledArray []byte
+	for _, user := range users {
+		payloadBytes, _ := json.Marshal(user)
+		marshaledArray = append(marshaledArray, payloadBytes...)
+	}
+	return marshaledArray
+}
