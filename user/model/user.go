@@ -1,22 +1,24 @@
 package model
 
 import (
-	"fmt"
 	"time"
 )
 
 type User struct {
-	id          int
-	firstName   string
-	lastName    string
-	email       string
-	profession  string
-	dateCreated time.Time
-	country     string
-	city        string
+	Id          int       `json:"id"`
+	FirstName   string    `json:"firstName"`
+	LastName    string    `json:"lastName"`
+	Email       string    `json:"email"`
+	Profession  string    `json:"profession"`
+	DateCreated time.Time `json:"dateCreated"`
+	Country     string    `json:"country"`
+	City        string    `json:"email"`
 }
 
-func (user *User) Print() {
-	fmt.Println(user.id, user.firstName, user.lastName, user.email, user.email,
-		user.profession, user.dateCreated.String(), user.country, user.city)
-}
+//func Print(users *[]User) {
+//	for user := range users {
+//
+//	}
+//	fmt.Println(user.Id, user.FirstName, user.LastName, user.Email, user.Profession, user.DateCreated.String(),
+//		user.Country, user.City)
+//}
