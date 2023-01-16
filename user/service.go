@@ -3,10 +3,13 @@ package user
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"mag_matual_tech_project/constants"
 	"mag_matual_tech_project/user/model"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -15,17 +18,44 @@ type V1Service struct {
 	Users *[]model.User
 }
 
-func (service *V1Service) GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Endpoint Hit: GetAllUsers")
-	response, _ := json.MarshalIndent(service.Users, "", "    ")
+func (service *V1Service) GetAllUsers(w http.ResponseWriter, request *http.Request) {
+	log.Info("Endpoint Hit: GetAllUsers")
+
+	apiResponse := model.APIResponse{Users: *service.Users}
+	response, err := json.MarshalIndent(apiResponse, "", "    ")
+	if err != nil {
+		log.Error("Unable to marshal apiResponse: ", apiResponse, " into response object.")
+	}
+	log.Error("Returning result: ", apiResponse)
 	fmt.Fprintf(w, "%v", string(response))
 
 }
 
-func (service *V1Service) GetUsersByDatePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Endpoint Hit: getUsersByDate")
+func (service *V1Service) GetUserById(writer http.ResponseWriter, request *http.Request) {
+	log.Info("Endpoint Hit: etUsersById")
+	requestVariables := mux.Vars(request)
+	id, _ := strconv.Atoi(requestVariables["id"])
 
-	query := r.URL.Query()
+	var foundUsers []model.User
+	for _, user := range *service.Users {
+		if user.Id == id {
+			foundUsers = append(foundUsers, user)
+		}
+	}
+	apiResponse := model.APIResponse{Users: foundUsers}
+	response, err := json.MarshalIndent(apiResponse, "", "    ")
+	if err != nil {
+		log.Error("Unable to marshal apiResponse: ", apiResponse, " into response object.")
+	}
+
+	log.Error("Returning result: ", apiResponse)
+	fmt.Fprintf(writer, "%v", string(response))
+}
+
+func (service *V1Service) GetUsersByDatePage(writer http.ResponseWriter, request *http.Request) {
+	log.Info("Endpoint Hit: getUsersByDate")
+
+	query := request.URL.Query()
 	fromDate, _ := time.Parse(constants.DateFormat, query.Get("fromDate"))
 	toDate, _ := time.Parse(constants.DateFormat, query.Get("toDate"))
 	var foundUsers []model.User
@@ -35,18 +65,23 @@ func (service *V1Service) GetUsersByDatePage(w http.ResponseWriter, r *http.Requ
 			foundUsers = append(foundUsers, user)
 		}
 	}
+	apiResponse := model.APIResponse{Users: foundUsers}
+	response, err := json.MarshalIndent(apiResponse, "", "    ")
+	if err != nil {
+		log.Error("Unable to marshal apiResponse: ", apiResponse, " into response object.")
+	}
 
-	response, _ := json.MarshalIndent(foundUsers, "", "    ")
-	fmt.Fprintf(w, "%v", string(response))
+	log.Error("Returning result: ", apiResponse)
+	fmt.Fprintf(writer, "%v", string(response))
 }
 
-func (service *V1Service) GetUsersByProfessionPage(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Endpoint Hit: getUsersByProfession")
-	body, _ := ioutil.ReadAll(r.Body)
-	print(string(body))
-	var reqProfession model.ProfessionRequest
+func (service *V1Service) GetUsersByProfessionPage(writer http.ResponseWriter, request *http.Request) {
+	log.Info("Endpoint Hit: getUsersByProfession")
+	body, _ := ioutil.ReadAll(request.Body)
+	log.Infof(string(body))
+	var reqProfession model.APIProfessionRequest
 	if err := json.Unmarshal(body, &reqProfession); err != nil {
-		// TODO: Log errors here
+		log.Error("Unable to unmarshal request. Tried ", string(body), " but was unable to unmarshal.")
 	}
 
 	var foundUsers []model.User
@@ -55,6 +90,13 @@ func (service *V1Service) GetUsersByProfessionPage(w http.ResponseWriter, r *htt
 			foundUsers = append(foundUsers, user)
 		}
 	}
-	response, _ := json.MarshalIndent(foundUsers, "", "    ")
-	fmt.Fprintf(w, "%v", string(response))
+
+	apiResponse := model.APIResponse{Users: foundUsers}
+	response, err := json.MarshalIndent(apiResponse, "", "    ")
+	if err != nil {
+		log.Error("Unable to marshal apiResponse: ", apiResponse, " into response object.")
+	}
+
+	log.Error("Returning result: ", apiResponse)
+	fmt.Fprintf(writer, "%v", string(response))
 }

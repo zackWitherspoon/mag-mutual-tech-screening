@@ -1,5 +1,5 @@
 package model
 
-type ProfessionResponse struct {
+type APIResponse struct {
 	Users []User `json:"users"`
 }

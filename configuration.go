@@ -29,19 +29,22 @@ func (csvConfig Configuration) NewConfiguration() *Configuration {
 func (csvConfig Configuration) loadUsers(filePath string) *[]model.User {
 	file, err := os.Open(filePath)
 	if err != nil {
-		log.Println("Cannot open CSV file:", err)
+		log.Fatal("Cannot open CSV file:", err)
 	}
 	defer file.Close()
 	reader := csv.NewReader(file)
 	rows, err := reader.ReadAll()
 	if err != nil {
-		log.Println("Cannot read CSV file:", err)
+		log.Fatal("Cannot read CSV file:", err)
 	}
 
 	var users []model.User
 	for count, row := range rows {
 		if count != 0 {
-			id, _ := strconv.ParseInt(row[0], 0, 0)
+			id, err := strconv.ParseInt(row[0], 0, 0)
+			if err != nil {
+				log.Fatal("Couldn't ")
+			}
 			date, _ := time.Parse(constants.DateFormat, row[5])
 			newUser := model.User{
 				Id:          int(id),

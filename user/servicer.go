@@ -9,6 +9,7 @@ type Service interface {
 	GetAllUsers(w http.ResponseWriter, r *http.Request)
 	GetUsersByDatePage(w http.ResponseWriter, r *http.Request)
 	GetUsersByProfessionPage(w http.ResponseWriter, r *http.Request)
+	GetUserById(w http.ResponseWriter, r *http.Request)
 }
 
 func NewService(users *[]model.User) Service {

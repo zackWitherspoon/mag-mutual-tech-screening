@@ -1,5 +1,5 @@
 package model
 
-type ProfessionRequest struct {
+type APIProfessionRequest struct {
 	Profession string `json:"profession"`
 }
