@@ -34,6 +34,5 @@ Deliverables:
 
 ### Execution steps:
 ```
-go build
 go run .
 ```
