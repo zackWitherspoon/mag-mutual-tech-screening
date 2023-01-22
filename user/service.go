@@ -15,8 +15,9 @@ import (
 )
 
 const (
-	idErrorMessage                   = "Id used in an incorrect format. Try again with a different id"
+	dateRangeNotUsableErrorMessage   = "The date range entered is not a usable date range. Please enter a fromDate and toDate range that's valid."
 	dateUnParsableErrorMessage       = "fromDate or toDate unable to be parsed. Please try again with a different date"
+	idErrorMessage                   = "Id used in an incorrect format. Try again with a different id"
 	professionUnParsableErrorMessage = "Unable to unmarshal request. Try with a different profession"
 )
 
@@ -73,6 +74,11 @@ func (service *V1Service) GetUsersByDatePage(writer http.ResponseWriter, request
 	if err != nil {
 		log.Error(dateUnParsableErrorMessage, err)
 		http.Error(writer, dateUnParsableErrorMessage, http.StatusBadRequest)
+		return
+	}
+	if fromDate.After(toDate) || toDate.Before(fromDate) {
+		log.Error(dateRangeNotUsableErrorMessage)
+		http.Error(writer, dateRangeNotUsableErrorMessage, http.StatusBadRequest)
 		return
 	}
 	var foundUsers []model.User
